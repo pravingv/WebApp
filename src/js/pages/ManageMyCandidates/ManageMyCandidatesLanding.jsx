@@ -65,8 +65,11 @@ export default function ManageMyCandidatesLanding () {
   const selectedPolitician = politiciansToManage.find((politician) => politician.politician_we_vote_id === selectedPoliticianWeVoteId) || null;
 
   useEffect(() => {
-    if (!selectedPoliticianWeVoteId && politiciansToManage.length > 0) {
-      setSelectedPoliticianWeVoteId(politiciansToManage[0].politician_we_vote_id);
+    if (politiciansToManage?.length > 0) {
+      const isSelectedValid = politiciansToManage.some((p) => p.politician_we_vote_id === selectedPoliticianWeVoteId);
+      if (!isSelectedValid || politiciansToManage.length === 1) {
+        setSelectedPoliticianWeVoteId(politiciansToManage[0].politician_we_vote_id);
+      }
     }
   }, [politiciansToManage, selectedPoliticianWeVoteId]);
 
@@ -120,13 +123,6 @@ export default function ManageMyCandidatesLanding () {
     handleNavScroll();
   }, []);
 
-  useEffect(() => {
-  if (politiciansToManage.length === 1) {
-    setSelectedPoliticianWeVoteId(
-      politiciansToManage[0].politician_we_vote_id
-    );
-  }
-}, [politiciansToManage]);
 
   // Main render
   const handleClaimEdit = () => history.push(`/candidate/${selectedPoliticianWeVoteId}/edit`);
